@@ -27,6 +27,7 @@ def scrape():
 
 
     # Create final dataframe to store all the data. 
+    all_cases = pd.DataFrame(columns=['Name', 'PartyType', 'Representation', "CaseNumber", 'CaseName', 'CaseType', 'DateFiled', 'AdditionalInfo'])
     cases = pd.DataFrame(columns=['Name', 'PartyType', 'Representation', "CaseNumber", 'CaseName', 'CaseType', 'DateFiled', 'AdditionalInfo'])
     password = open("data/password.txt", "r")
     driver = webdriver.Chrome()
@@ -58,6 +59,7 @@ def scrape():
             links = driver.find_elements(By.XPATH, "//*[contains(@href, '?q=node/391/')]") 
             # TODO: update the saving of the dateframe to account for days now. 
             cases = case_scrape(driver,cases,links)
+            all_cases = pd.concat([all_cases, cases], ignore_index=True)
 
             if not go_to_next_page(driver):
                 break
