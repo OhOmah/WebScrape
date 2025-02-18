@@ -1,0 +1,5 @@
+
+*.csv
+data/password.txt
+.vscode/launch.json
+__pycache__/case_scrape.cpython-311.pyc
