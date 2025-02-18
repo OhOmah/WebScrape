@@ -74,7 +74,7 @@ def scrape():
 
     
     # if arrow is found redo loop
-    cases.to_csv('data/data.csv', index=False)
+    all_cases.to_csv('data/data.csv', index=False)
 
 if __name__ == '__main__':
     scrape()
