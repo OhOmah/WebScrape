@@ -37,13 +37,17 @@ def case_scrape(driver, cases, links):
     PURPOSE OF THIS FUNCTION: 
     This will take a 
     '''
+
     for i in range(len(links)):
         # 3. Click and get information of the first element in list, store in dataframe then go back
         link = links[0]
         link.click()
-        parties = driver.find_element(By.XPATH, '//*[contains(text(), "PARTIES")]')
-        parties.click()
-        time.sleep(5)
+        try:
+            parties = driver.find_element(By.XPATH, '//*[contains(text(), "PARTIES")]')
+            parties.click()
+            time.sleep(5)
+        except:
+            pass
 
         # Scrape the type of case. 
         table = driver.find_elements(By.XPATH, "//*[contains(@id, 'forms_table')]")
