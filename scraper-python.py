@@ -38,7 +38,9 @@ def scrape():
 
     username_input.send_keys("OhOmah")
     password_input.send_keys(password)
-
+    login = driver.find_element(By.ID, "edit-submit")
+    login.click()
+    time.sleep(5)
     
 
     # Loop through a list of dates 
