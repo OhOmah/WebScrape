@@ -66,6 +66,7 @@ def scrape():
             if not go_to_next_page(driver):
                 break
         time.sleep(5)
+        all_cases.to_csv(f'data/{date}_data.csv', index=False)
 
     # Create a loop to get a count of all clickable links in a webpage: 
     # 1. Get the original list of elements, get the count of each element.
