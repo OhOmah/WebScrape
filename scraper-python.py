@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-from case_scrape import case_split, case_scrape, go_to_next_page, convert_date_range
+from case_scrape import case_split, case_scrape, go_to_next_page, convert_date_range, grab_overall_table
 
 import re
 import time
@@ -58,6 +58,7 @@ def scrape():
 
         # Grab the data needed 
         while True:
+            date_table = grab_overall_table(driver)
             links = driver.find_elements(By.XPATH, "//*[contains(@href, '?q=node/391/')]") 
             # TODO: update the saving of the dateframe to account for days now. 
             cases = case_scrape(driver,cases,links)

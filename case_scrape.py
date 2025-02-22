@@ -106,4 +106,16 @@ def convert_date_range(start_date, end_date):
     formatted_dates = [datetime.strptime(date, "%Y-%m-%d").strftime("%m%d%Y") for date in date_range]
 
     return formatted_dates 
+
+def grab_overall_table(driver):
+    '''
+    PURPOSE OF THIS FUNCTION: 
+    Grabs the table for each page, saves into a dataframe then exports data to loop where
+    once we get through the date, saves into a larger dataframe. 
+    '''
+    # find the main table
+    table = driver.find_elements(By.XPATH, "//*[contains(@id, 'form.searchPage)]")
+    print(table)    
+
+    return table
     
