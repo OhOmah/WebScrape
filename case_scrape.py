@@ -130,7 +130,7 @@ def grab_overall_table(driver):
         'ResultType'
         ]
 
-    data = [line.splie(" ", maxsplit=0) for line in lines[1:]]
+    data = [line.split(" ", maxsplit=0) for line in lines[1:]]
 
     # Create dataframe
     overall_data = pd.DataFrame(data, columns= headers)
