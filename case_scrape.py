@@ -114,8 +114,21 @@ def grab_overall_table(driver):
     once we get through the date, saves into a larger dataframe. 
     '''
     # find the main table
-    table = driver.find_elements(By.XPATH, "//*[contains(@id, 'form.searchPage)]")
-    print(table)    
+    table = driver.find_elements(By.XPATH, "//*[contains(@id, 'form.searchPage')]")
+    
+    # Grab data inside table and store in dataframe
+    print(table)
+
+    # Create dataframe
+    overall_data = pd.DataFrame(columns= [
+        'Date',
+        'Time',
+        'CaseNumber',
+        'CaseName',
+        'HearingDescription',
+        'Department',
+        'ResultType'
+        ])
 
     return table
     
