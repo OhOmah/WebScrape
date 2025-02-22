@@ -118,7 +118,7 @@ def grab_overall_table(driver):
     table = driver.find_elements(By.XPATH, "//*[contains(@id, 'form.searchPage')]")
 
     # Split 
-    raw_data = table[0].text()
+    raw_data = table[0].text
     lines = raw_data.split("\n")
     headers = [
         'Date',
@@ -131,7 +131,7 @@ def grab_overall_table(driver):
         ]
 
     data = [line.splie(" ", maxsplit=0) for line in lines[1:]]
-    
+
     # Create dataframe
     overall_data = pd.DataFrame(data, columns= headers)
     
