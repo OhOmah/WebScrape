@@ -117,11 +117,10 @@ def grab_overall_table(driver):
     # find the main table
     table = driver.find_elements(By.XPATH, "//*[contains(@id, 'form.searchPage')]")
 
-    # Grab data inside table and store in dataframe
-    rows = driver.find_elements(By.XPATH, "//table[@class='searchResultsPage']//tr[contains(@id, 'form.searchPage')]")
-
-    # Create dataframe
-    overall_data = pd.DataFrame(columns= [
+    # Split 
+    raw_data = table[0].text()
+    lines = raw_data.split("\n")
+    headers = [
         'Date',
         'Time',
         'CaseNumber',
@@ -129,21 +128,14 @@ def grab_overall_table(driver):
         'HearingDescription',
         'Department',
         'ResultType'
-        ])
-    
-    data = []
-    for row in rows:
-        cells = row.find_elements(By.TAG_NAME, "td")
-        if len(cells) >= 7:
-            data.append([
-                cells[0].text.strip(),  # Date
-                cells[1].text.strip(),  # Time
-                cells[2].text.strip(),  # Case Number
-                cells[3].text.strip(),  # Case Name
-                cells[4].text.strip(),  # Hearing Description
-                cells[5].text.strip(),  # Department
-                cells[6].text.strip()   # Result Type
-            ])
+        ]
 
+    data = [line.splie(" ", maxsplit=0) for line in lines[1:]]
+    
+    # Create dataframe
+    overall_data = pd.DataFrame(data, columns= headers)
+    
+
+    print("hi")
     return table
     
