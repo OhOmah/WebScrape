@@ -118,7 +118,7 @@ def grab_overall_table(driver):
     table = driver.find_elements(By.XPATH, "//*[contains(@id, 'form.searchPage')]")
 
     # Grab data inside table and store in dataframe
-    rows = driver.find_elements(By.XPATH, "//table[@class='searchResultsPage']//tr[contains(@id, 'form_search_row')]")
+    rows = driver.find_elements(By.XPATH, "//table[@class='searchResultsPage']//tr[contains(@id, 'form.searchPage')]")
 
     # Create dataframe
     overall_data = pd.DataFrame(columns= [
