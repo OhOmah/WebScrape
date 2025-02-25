@@ -19,7 +19,7 @@ Saves the data to a data frame for analysis.
 
 def scrape():
     # Enter date range here
-    start_date = '06/05/2024'
+    start_date = '06/01/2024'
     end_date = '12/31/2024'
 
     # convert date range
@@ -57,8 +57,11 @@ def scrape():
         submit = driver.find_element(By.ID, 'edit-submit')
         submit.click()
         # Grab all page data
-        page_data = grab_overall_table(driver)
-        all_page_data = pd.concat([all_page_data, page_data], ignore_index=True)
+        try:
+            page_data = grab_overall_table(driver)
+            all_page_data = pd.concat([all_page_data, page_data], ignore_index=True)
+        except:
+            print("no cases this date")
 
         # Grab the data needed 
         while True:
