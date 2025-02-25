@@ -125,7 +125,7 @@ def grab_overall_table(driver):
     df = df_list[0]
 
     # Convert names of columns to better match our main dataframe  
-    df.reanme(columns={'Case Number': "CaseNumber", 
+    df.rename(columns={'Case Number': "CaseNumber", 
                         'Case Name': 'CaseName',
                         'Hearing Description': 'HearingDescription',
                         'Result Type': 'ResultType' }, inplace=True)
