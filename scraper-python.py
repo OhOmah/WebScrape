@@ -29,6 +29,7 @@ def scrape():
     # Create final dataframe to store all the data. 
     all_cases = pd.DataFrame(columns=['Name', 'PartyType', 'Representation', "CaseNumber", 'CaseName', 'CaseType', 'DateFiled', 'AdditionalInfo'])
     cases = pd.DataFrame(columns=['Name', 'PartyType', 'Representation', "CaseNumber", 'CaseName', 'CaseType', 'DateFiled', 'AdditionalInfo'])
+    all_page_data = pd.DataFrame(columns=["Date", "Time", "CaseNumber", "CaseName", "HearingDescription", "Department", "ResultType"])
     password = open("data/password.txt", "r")
     driver = webdriver.Chrome()
     # Log into website
@@ -55,10 +56,12 @@ def scrape():
         revealed.send_keys(date)
         submit = driver.find_element(By.ID, 'edit-submit')
         submit.click()
+        # Grab all page data
+        page_data = grab_overall_table(driver)
+        all_page_data = pd.concat([all_page_data, page_data], ignore_index=True)
 
         # Grab the data needed 
         while True:
-            date_table = grab_overall_table(driver)
             links = driver.find_elements(By.XPATH, "//*[contains(@href, '?q=node/391/')]") 
             # TODO: update the saving of the dateframe to account for days now. 
             cases = case_scrape(driver,cases,links)
@@ -67,6 +70,8 @@ def scrape():
             if not go_to_next_page(driver):
                 break
         time.sleep(5)
+        
+        all_page_data.to_csv(f'data/{date}_overall_page_data.csv', index=False)
         all_cases.to_csv(f'data/{date}_data.csv', index=False)
 
     # Create a loop to get a count of all clickable links in a webpage: 

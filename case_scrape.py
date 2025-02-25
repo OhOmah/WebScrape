@@ -117,13 +117,19 @@ def grab_overall_table(driver):
     # find the main table
     table = driver.find_elements(By.XPATH, "//*[contains(@id, 'form.searchPage')]")
 
-    # try a better way to grab the table 
-
     # Split 
     raw_data = table[0].get_attribute("outerHTML")
     
     # Create Dataframe
-    df = pd.read_html(raw_data)  
+    df_list = pd.read_html(raw_data) 
+    df = df_list[0]
 
-    return df[0] # pd.read_html returns a list of dataframe objects, return the first index 
+    # Convert names of columns to better match our main dataframe  
+    df.reanme(columns={'Case Number': "CaseNumber", 
+                        'Case Name': 'CaseName',
+                        'Hearing Description': 'HearingDescription',
+                        'Result Type': 'ResultType' }, inplace=True)
+    
+
+    return df # pd.read_html returns a list of dataframe objects, return the first index 
     
