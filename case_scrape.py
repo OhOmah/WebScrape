@@ -117,52 +117,13 @@ def grab_overall_table(driver):
     # find the main table
     table = driver.find_elements(By.XPATH, "//*[contains(@id, 'form.searchPage')]")
 
+    # try a better way to grab the table 
+
     # Split 
-    raw_data = table[0].text
-    lines = raw_data.split("\n")
-    headers = [
-        'Date',
-        'Time',
-        'CaseNumber',
-        'CaseName',
-        'HearingDescription',
-        'Department',
-        'ResultType'
-        ]
+    raw_data = table[0].get_attribute("outerHTML")
+    
+    # Create Dataframe
+    df = pd.read_html(raw_data)  
 
-    data = [line.split(" ", maxsplit=0) for line in lines[1:]]
-    data = process_data(data)
-    # Create dataframe
-    overall_data = pd.DataFrame(data, columns=headers)
+    return df[0] # pd.read_html returns a list of dataframe objects, return the first index 
     
-
-    print("hi")
-    return table
-    
-def process_data(data):
-    result = []
-    for entry in data:
-        text = entry[0]
-        tokens = text.split()
-        
-        date = tokens[0]
-        time = f"{tokens[1]} {tokens[2]}"
-        case_number = tokens[3]
-        case_name = " ".join(tokens[4:9])  # Handles case names of different lengths
-        hearing_description = " ".join(tokens[9:11])
-        department = " ".join(tokens[11:13])
-        result_type = tokens[13]
-        
-        # Append the processed result as a dictionary
-        result.append({
-            "Date": date,
-            "Time": time,
-            "CaseNumber": case_number,
-            "CaseName": case_name,
-            "HearingDescription": hearing_description,
-            "Department": department,
-            "ResultType": result_type
-        })
-    
-    return result
-    return result

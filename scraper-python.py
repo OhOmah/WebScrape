@@ -19,7 +19,7 @@ Saves the data to a data frame for analysis.
 
 def scrape():
     # Enter date range here
-    start_date = '06/04/2024'
+    start_date = '06/05/2024'
     end_date = '12/31/2024'
 
     # convert date range
