@@ -57,11 +57,7 @@ def scrape():
         submit = driver.find_element(By.ID, 'edit-submit')
         submit.click()
         # Grab all page data
-        try:
-            page_data = grab_overall_table(driver)
-            all_page_data = pd.concat([all_page_data, page_data], ignore_index=True)
-        except:
-            print("no cases this date")
+
 
         # Grab the data needed 
         while True:
@@ -69,6 +65,11 @@ def scrape():
             # TODO: update the saving of the dateframe to account for days now. 
             cases = case_scrape(driver,cases,links)
             all_cases = pd.concat([all_cases, cases], ignore_index=True)
+            try:
+                page_data = grab_overall_table(driver)
+                all_page_data = pd.concat([all_page_data, page_data], ignore_index=True)
+            except:
+                print("no cases this date")
 
             if not go_to_next_page(driver):
                 break
