@@ -19,7 +19,7 @@ Saves the data to a data frame for analysis.
 
 def scrape():
     # Enter date range here
-    start_date = '06/01/2024'
+    start_date = '06/05/2024'
     end_date = '12/31/2024'
 
     # convert date range
@@ -27,7 +27,8 @@ def scrape():
 
 
     # Create final dataframe to store all the data. 
-    all_cases = pd.DataFrame(columns=['Name', 'PartyType', 'Representation', "CaseNumber", 'CaseName', 'CaseType', 'DateFiled', 'AdditionalInfo'])
+    all_party = pd.DataFrame(columns=['Name', 'PartyType', 'Representation', "CaseNumber", 'CaseName', 'CaseType', 'DateFiled', 'AdditionalInfo'])
+    all_register = pd.DataFrame(columns=['Date', 'RegisterNotes', 'CaseNumber'])
     cases = pd.DataFrame(columns=['Name', 'PartyType', 'Representation', "CaseNumber", 'CaseName', 'CaseType', 'DateFiled', 'AdditionalInfo'])
     all_page_data = pd.DataFrame(columns=["Date", "Time", "CaseNumber", "CaseName", "HearingDescription", "Department", "ResultType"])
     password = open("data/password.txt", "r")
@@ -56,27 +57,39 @@ def scrape():
         revealed.send_keys(date)
         submit = driver.find_element(By.ID, 'edit-submit')
         submit.click()
-        # Grab all page data
+
 
 
         # Grab the data needed 
         while True:
             links = driver.find_elements(By.XPATH, "//*[contains(@href, '?q=node/391/')]") 
             # TODO: update the saving of the dateframe to account for days now. 
-            cases = case_scrape(driver,cases,links)
-            all_cases = pd.concat([all_cases, cases], ignore_index=True)
+            party, register = case_scrape(driver,cases,links)
+            all_party = pd.concat([all_party, party], ignore_index=True)
+            all_register = pd.concat([all_register, register])
             try:
+                # Grab all page data
                 page_data = grab_overall_table(driver)
                 all_page_data = pd.concat([all_page_data, page_data], ignore_index=True)
             except:
                 print("no cases this date")
 
+
             if not go_to_next_page(driver):
                 break
         time.sleep(5)
-        
+        # drop any duplicates that may popup
+        all_page_data.drop_duplicates(inplace=True)
+        all_party.drop_duplicates(inplace=True)
+        all_register.drop_duplicates(inplace=True)
+
+        # Export the cases. TODO: Instead let's focus on the month instead. 
         all_page_data.to_csv(f'data/{date}_overall_page_data.csv', index=False)
-        all_cases.to_csv(f'data/{date}_data.csv', index=False)
+        all_party.to_csv(f'data/{date}_party_information.csv', index=False)
+        all_register.to_csv(f'data/{date}_register_notes.csv')
+    '''
+    TODO: Need to restructure for loop export data as months, helps with thinning data down. 
+    '''
 
     # Create a loop to get a count of all clickable links in a webpage: 
     # 1. Get the original list of elements, get the count of each element.

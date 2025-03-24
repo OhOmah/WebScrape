@@ -32,7 +32,7 @@ def case_split(case):
 
     return df
 
-def case_scrape(driver, cases, links):
+def case_scrape(driver, party, links, register):
     '''
     PURPOSE OF THIS FUNCTION: 
     This will take any given case and save into 2 tables, one for general information
@@ -74,6 +74,30 @@ def case_scrape(driver, cases, links):
 
         # Merge data
         combined_data = case_df.merge(case_info_df, how="left")
+
+        # Grab Register information
+        try:
+            register_web = driver.find_element(By.XPATH, '//*[contains(text(), "REGISTER")]')
+            register_web.click()
+            time.sleep(5)
+        except:
+            pass
+
+        # Now save to a table
+        table = driver.find_elements(By.XPATH, '//*[contains(@id, "paneArea")]')
+        df = table[0].get_attribute("outerHTML")
+
+        # Save as a pandas dataframe
+        register_df = pd.read_html(df)[0]
+
+        # rename and drop unneeded columns. 
+        register_df.drop(register_df.index[:2], inplace=True)
+        register_df.drop(['Unnamed: 0'], axis=1, inplace=True)
+        register_df.rename(columns={"Unnamed: 2": "RegisterNotes"}, inplace=True)
+        register_df['CaseNumber'] = casenumber
+        register_df['CaseNumber'].fillna(register_df['CaseNumber'][0], inplace=True)
+
+
         driver.back()
 
         # 4. Get new list of elements, this time subtract first x amount of objects
@@ -83,8 +107,13 @@ def case_scrape(driver, cases, links):
 
         # 5. continue loop. 
         
-        cases = pd.concat([cases, combined_data], ignore_index=True)
-    return cases
+        party = pd.concat([party, combined_data], ignore_index=True)
+    return party, register 
+'''
+Logging changes made since last edit: 
+    1. Added registry data
+    2. export registry data to main function
+'''
 
 def go_to_next_page(driver):
     try:
