@@ -23,7 +23,7 @@ def scrape():
     end_date = '12/31/2024'
 
     # convert date range
-    date_range = convert_date_range(start_date=start_date, end_date=end_date)
+    date_range, month_range = convert_date_range(start_date=start_date, end_date=end_date)
 
 
     # Create final dataframe to store all the data. 
@@ -45,49 +45,58 @@ def scrape():
     login.click()
     time.sleep(5)
     
+    '''
+    GOAL:
+    Reduce the bloat of repeated cases, reducing file size. 
 
+    CHANGES TO BE NOTED: 
+    1. Change the for loop to loop through months on top of days DONE
+    2. main files to export will be based on month instead of day DONE
+    3. Purge repeat case numbers at the end of each month. DONE 
+    '''
     # Loop through a list of dates 
     # Query date
-    for date in date_range: 
-        # Wait until date box pops up
-        revealed = driver.find_element(By.ID, "21966")
-        time.sleep(5)
-        wait = WebDriverWait(driver, timeout=10)
-        wait.until(lambda d: revealed.is_displayed())
-        revealed.clear()
-        revealed.send_keys(date)
-        submit = driver.find_element(By.ID, 'edit-submit')
-        submit.click()
+    for month in month_range:
+        for date in date_range: 
+            # Wait until date box pops up
+            revealed = driver.find_element(By.ID, "21966")
+
+            wait = WebDriverWait(driver, timeout=10)
+            wait.until(lambda d: revealed.is_displayed())
+            revealed.clear()
+            revealed.send_keys(date)
+            submit = driver.find_element(By.ID, 'edit-submit')
+            submit.click()
 
 
 
-        # Grab the data needed 
-        while True:
-            links = driver.find_elements(By.XPATH, "//*[contains(@href, '?q=node/391/')]") 
-            # TODO: update the saving of the dateframe to account for days now. 
-            party, register = case_scrape(driver,cases,links, register)
-            all_party = pd.concat([all_party, party], ignore_index=True)
-            all_register = pd.concat([all_register, register])
-            try:
-                # Grab all page data
-                page_data = grab_overall_table(driver)
-                all_page_data = pd.concat([all_page_data, page_data], ignore_index=True)
-            except:
-                print("no cases this date")
+            # Grab the data needed 
+            while True:
+                links = driver.find_elements(By.XPATH, "//*[contains(@href, '?q=node/391/')]") 
+                # TODO: update the saving of the dateframe to account for days now. 
+                party, register = case_scrape(driver,cases,links, register)
+                all_party = pd.concat([all_party, party], ignore_index=True)
+                all_register = pd.concat([all_register, register])
+                try:
+                    # Grab all page data
+                    page_data = grab_overall_table(driver)
+                    all_page_data = pd.concat([all_page_data, page_data], ignore_index=True)
+                except:
+                    print("no cases this date")
 
 
-            if not go_to_next_page(driver):
-                break
-        time.sleep(5)
-        # drop any duplicates that may popup
-        all_page_data.drop_duplicates(inplace=True)
-        all_party.drop_duplicates(inplace=True)
-        all_register.drop_duplicates(inplace=True)
+                if not go_to_next_page(driver):
+                    break
+            time.sleep(5)
+            # Drop any duplicates that may popup
+            all_page_data.drop_duplicates(inplace=True)
+            all_party.drop_duplicates(inplace=True)
+            all_register.drop_duplicates(inplace=True)
 
-        # Export the cases. TODO: Instead let's focus on the month instead. 
-        all_page_data.to_csv(f'data/{date}_overall_page_data.csv', index=False)
-        all_party.to_csv(f'data/{date}_party_information.csv', index=False)
-        all_register.to_csv(f'data/{date}_register_notes.csv')
+            # Export the cases. TODO: Instead let's focus on the month instead. 
+        all_page_data.to_csv(f'data/{month}_overall_page_data.csv', index=False)
+        all_party.to_csv(f'data/{month}_party_information.csv', index=False)
+        all_register.to_csv(f'data/{month}_register_notes.csv')
     '''
     TODO: Need to restructure for loop export data as months, helps with thinning data down. 
     '''

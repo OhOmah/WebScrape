@@ -8,6 +8,7 @@ import re
 import time
 from datetime import datetime
 import pandas as pd 
+import numpy as np
 
 '''
 PURPOSE OF THIS FILE:
@@ -69,8 +70,9 @@ def case_scrape(driver, party, links, register):
 
         # Create a merge variable to append new information 
         casenumber = case_info_df['CaseNumber'][0]
-        case_df['CaseNumber'] = casenumber
-        case_df['CaseNumber'].fillna(case_info_df['CaseNumber'][0], inplace=True)
+        # this code can be refined
+        case_df['CaseNumber'] = np.nan
+        case_df['CaseNumber'].fillna(casenumber, inplace=True)
 
         # Merge data
         combined_data = case_df.merge(case_info_df, how="left")
@@ -94,8 +96,9 @@ def case_scrape(driver, party, links, register):
         register_df.drop(register_df.index[:2], inplace=True)
         register_df.drop(['Unnamed: 0'], axis=1, inplace=True)
         register_df.rename(columns={"Unnamed: 2": "RegisterNotes"}, inplace=True)
-        register_df['CaseNumber'] = casenumber
-        register_df['CaseNumber'].fillna(register_df['CaseNumber'][0], inplace=True)
+        register_df['CaseNumber'] = np.nan
+        register_df['CaseNumber'].fillna(casenumber, inplace=True)
+        
 
 
         driver.back()
@@ -108,7 +111,8 @@ def case_scrape(driver, party, links, register):
         # 5. continue loop. 
         
         party = pd.concat([party, combined_data], ignore_index=True)
-    return party, register 
+        register = pd.concat([register, register_df], ignore_index=True)
+    return party, register
 '''
 Logging changes made since last edit: 
     1. Added registry data
@@ -128,14 +132,17 @@ def go_to_next_page(driver):
 def convert_date_range(start_date, end_date):
     # Get the date range 
     date_range = pd.date_range(start=start_date, end=end_date)
+    month_range = pd.period_range(start=start_date, end=end_date, freq='M')
 
     # Take the range and convert to a list
     date_range = date_range.astype(str).to_list()
+    month_range = month_range.astype(str).to_list()
 
     # Convert the format of the dates to fit the website
+    # Month range does not need to be reformatted given no interaction with front facing website.
     formatted_dates = [datetime.strptime(date, "%Y-%m-%d").strftime("%m%d%Y") for date in date_range]
 
-    return formatted_dates 
+    return formatted_dates, month_range 
 
 def grab_overall_table(driver):
     '''
