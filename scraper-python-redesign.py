@@ -7,8 +7,9 @@ from case_scrape import case_split, case_scrape, go_to_next_page, convert_date_r
 
 import re
 import time
+import logging
 import pandas as pd
-from datetime import datetime
+import datefinder
 from bs4 import BeautifulSoup
 
 '''
@@ -18,9 +19,11 @@ Saves the data to a data frame for analysis.
 '''
 
 def scrape():
-    # Enter date range here
+    
+    # Define the date range to scrape
     start_date = '06/05/2024'
     end_date = '12/31/2024'
+
 
     # convert date range
     date_range, month_range = convert_date_range(start_date=start_date, end_date=end_date)
@@ -53,6 +56,8 @@ def scrape():
     1. Change the for loop to loop through months on top of days DONE
     2. main files to export will be based on month instead of day DONE
     3. Purge repeat case numbers at the end of each month. DONE 
+    4. Export the pandas dataframe to a postgres database
+    5. Log dates that have pulled cases.  
     '''
     # Loop through a list of dates 
     # Query date
