@@ -4,6 +4,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from case_scrape import case_split, case_scrape, go_to_next_page, convert_date_range, grab_overall_table
+from data_storage import startup_db
 
 import re
 import time
@@ -31,8 +32,12 @@ def scrape():
     start_date = '06/05/2024'
     end_date = '12/31/2024'
 
+    # Pull password
+    with open("data/password.txt") as password_file:
+        passwords = json.load(password_file)
+
     # connect to database
-    # conn1 = conn_to_db(database="cases_register_db", password=dbpassword) <--- create an enviroment file to hold dbpassword. 
+    startup_db(password=passwords["db_login"])
 
     # convert date range
     date_range, month_range = convert_date_range(start_date=start_date, end_date=end_date)
@@ -43,12 +48,7 @@ def scrape():
     cases = pd.DataFrame(columns=['Name', 'PartyType', 'Representation', "CaseNumber", 'CaseName', 'CaseType', 'DateFiled', 'AdditionalInfo'])
     register = pd.DataFrame(columns=['Date', 'RegisterNotes', 'CaseNumber'])
     all_page_data = pd.DataFrame(columns=["Date", "Time", "CaseNumber", "CaseName", "HearingDescription", "Department", "ResultType"])
-    
-    # Pull password
-    with open("data/password.txt") as password_file:
-        passwords = json.load(password_file)
 
-    
     # Initialize driver 
     driver = webdriver.Chrome()
     
