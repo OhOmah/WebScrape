@@ -107,6 +107,7 @@ def case_scrape(driver, party, links, register, password):
             register_df.drop(register_df.index[:2], inplace=True)
             register_df.drop(['Unnamed: 0'], axis=1, inplace=True)
             register_df.rename(columns={"Unnamed: 2": "registernotes"}, inplace=True)
+            register_df.rename(columns={"Date": "date"}, inplace=True)
             register_df['casenumber'] = np.nan
             register_df['casenumber'].fillna(casenumber, inplace=True)
 
