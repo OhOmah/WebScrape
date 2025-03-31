@@ -47,6 +47,8 @@ def case_scrape(driver, party, links, register, password):
         # Crash happens here, I caught it once, I saw an error page and then it crashed out, would need 
         # to hit the back button to see if that issue needs to just be refreshed. 
         link = links[0]
+        # Print casenumber to console in case crash happens to know where it left off
+        print(link.text)
         link.click()
         try:
             # Scrape the type of case. 
@@ -161,7 +163,7 @@ def convert_date_range(start_date, end_date):
 
     return formatted_dates, month_range 
 
-def grab_overall_table(driver):
+def grab_overall_table(driver, password):
     '''
     PURPOSE OF THIS FUNCTION: 
     Grabs the table for each page, saves into a dataframe then exports data to loop where
@@ -183,19 +185,7 @@ def grab_overall_table(driver):
                         'Hearing Description': 'HearingDescription',
                         'Result Type': 'ResultType' }, inplace=True)
     
+    df.columns = map(str.lower(), df.columns)
+    save_to_db(which_table='overall', df=df, password = password)
 
-    return df # pd.read_html returns a list of dataframe objects, return the first index 
     
-def conn_to_db(database, password):
-    '''
-    PURPOSE OF THIS FUNCTION: 
-    Connect to requested database to write data to. Given that we are connecting to 
-    multiple databases with this project, it would save multiple lines if I save 
-    this as a quick function to make the code more readable. 
-    '''
-    conn = psycopg2.connect(database = database,
-                            user = "postgres",
-                            host = "localhost",
-                            password = password,
-                            port = 5432)
-    return conn

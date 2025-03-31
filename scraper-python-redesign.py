@@ -66,13 +66,15 @@ def scrape():
     1. Change the for loop to loop through months on top of days DONE
     2. main files to export will be based on month instead of day DONE
     3. Purge repeat case numbers at the end of each month. DONE 
-    4. Save the data to a postgressql server 
+    4. Save the data to a postgressql server DONE
     5. Check if data already exists in postgresql server DONE
     '''
     # Loop through a list of dates 
     # Query date
     for month in month_range:
         for date in date_range: 
+            # print date when crash happens, to know where it leaves off
+            print(date)
             # Wait until date box pops up
             revealed = driver.find_element(By.ID, "21966")
 
@@ -87,12 +89,9 @@ def scrape():
             while True:
                 links = driver.find_elements(By.XPATH, "//*[contains(@href, '?q=node/391/')]") 
                 case_scrape(driver,cases,links, register, password=passwords['db_login'])
-                #all_party = pd.concat([all_party, party], ignore_index=True)
-                #all_register = pd.concat([all_register, register])
                 try:
                     # Grab all page data
-                    page_data = grab_overall_table(driver)
-                    all_page_data = pd.concat([all_page_data, page_data], ignore_index=True)
+                    grab_overall_table(driver, password=passwords['db_login'])
                 except:
                     print("no cases this date")
 
