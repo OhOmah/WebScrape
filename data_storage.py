@@ -20,7 +20,10 @@ def close_db(conn):
     conn.commit()
     conn.close()
 
-def check_dupe(cur, casenumber):
+def check_dupe(casenumber, password):
+    # Start connection
+    conn, cur = startup_db(password)
+
     # Check if casenumber already exists
     cur.execute(f"""
     SELECT * FROM register_data
@@ -33,7 +36,11 @@ def check_dupe(cur, casenumber):
         check = False
     else:
         check = True
+    
+    # Close connection
+    close_db(conn)
+
     return check
 
-def save_to_db():
+def save_to_db(password):
     pass

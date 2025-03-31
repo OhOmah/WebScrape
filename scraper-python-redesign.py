@@ -36,9 +36,6 @@ def scrape():
     with open("data/password.txt") as password_file:
         passwords = json.load(password_file)
 
-    # connect to database
-    conn = startup_db(password=passwords["db_login"])
-
     # convert date range
     date_range, month_range = convert_date_range(start_date=start_date, end_date=end_date)
 
@@ -91,7 +88,7 @@ def scrape():
             while True:
                 links = driver.find_elements(By.XPATH, "//*[contains(@href, '?q=node/391/')]") 
                 # TODO: update the saving of the dateframe to account for days now. 
-                party, register = case_scrape(driver,cases,links, register, )
+                party, register = case_scrape(driver,cases,links, register, password=passwords['db_login'])
                 all_party = pd.concat([all_party, party], ignore_index=True)
                 all_register = pd.concat([all_register, register])
                 try:

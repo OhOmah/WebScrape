@@ -35,7 +35,7 @@ def case_split(case):
 
     return df
 
-def case_scrape(driver, party, links, register, conn):
+def case_scrape(driver, party, links, register, password):
     '''
     PURPOSE OF THIS FUNCTION: 
     This will take any given case and save into 2 tables, one for general information
@@ -54,7 +54,7 @@ def case_scrape(driver, party, links, register, conn):
             columns = table[0].find_elements(By.TAG_NAME, 'td')
             case_info_df = case_split(columns[0].text)
             # Check if case number already exists
-            check = check_dupe(conn, casenumber = case_info_df['CaseNumber'])
+            check = check_dupe(casenumber = case_info_df['CaseNumber'], password= password)
             if check == False:
                 # Pull data
                 parties = driver.find_element(By.XPATH, '//*[contains(text(), "PARTIES")]')
@@ -127,7 +127,7 @@ def case_scrape(driver, party, links, register, conn):
         
         except:
             pass 
-        
+
     return party, register
 '''
 Logging changes made since last edit: 
