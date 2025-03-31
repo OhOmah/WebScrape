@@ -12,4 +12,28 @@ def startup_db(password):
                             host = "localhost",
                             password = password,
                             port = 5432)
-    return conn
+    
+    cur = conn.cursor()
+    return conn, cur
+
+def close_db(conn):
+    conn.commit()
+    conn.close()
+
+def check_dupe(cur, casenumber):
+    # Check if casenumber already exists
+    cur.execute(f"""
+    SELECT * FROM register_data
+    WHERE casenumber = '{casenumber}';
+    """)
+    rows = cur.fetchall()
+
+    # if we don't get an empty list when querying the database, return true
+    if not rows:
+        check = False
+    else:
+        check = True
+    return check
+
+def save_to_db():
+    pass
