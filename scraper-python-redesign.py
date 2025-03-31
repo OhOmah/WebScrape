@@ -108,9 +108,9 @@ def scrape():
             all_register.drop_duplicates(inplace=True)
 
             # Export the cases. TODO: Instead let's focus on the month instead. 
-            all_page_data.to_csv(f'data/{month}_overall_page_data.csv', index=False)
-            all_party.to_csv(f'data/{month}_party_information.csv', index=False)
-            all_register.to_csv(f'data/{month}_register_notes.csv')
+            #all_page_data.to_csv(f'data/{month}_overall_page_data.csv', index=False)
+            #all_party.to_csv(f'data/{month}_party_information.csv', index=False)
+            #all_register.to_csv(f'data/{month}_register_notes.csv')
     '''
     TODO: Need to restructure for loop export data as months, helps with thinning data down. 
     '''
