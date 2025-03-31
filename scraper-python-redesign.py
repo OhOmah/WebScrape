@@ -69,6 +69,7 @@ def scrape():
     2. main files to export will be based on month instead of day DONE
     3. Purge repeat case numbers at the end of each month. DONE 
     4. Save the data to a postgressql server 
+    5. Check if data already exists in postgresql server DONE
     '''
     # Loop through a list of dates 
     # Query date

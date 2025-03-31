@@ -57,14 +57,14 @@ def save_to_db(which_table, df, password):
     conn, cur = startup_db(password)
     
     # create engine
-    create_engine(f'postgresql+psycopg2://postgres:{password}@localhost:5432/database')
+    engine = create_engine(f'postgresql+psycopg2://postgres:{password}@localhost:5432/database')
 
     if which_table == "party":
-        df.to_sql('party_data')
+        df.to_sql('party_data', engine)
     elif which_table == "register":
-        df.to_sql('register_data')
+        df.to_sql('register_data', engine)
     elif which_table == "overall":
-        pass
+        df.to_sql('overall_data', engine)
     else:
         print("no table was passed, no information saved.")
 

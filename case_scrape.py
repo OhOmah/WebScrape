@@ -109,7 +109,8 @@ def case_scrape(driver, party, links, register, password):
             register_df.rename(columns={"Unnamed: 2": "RegisterNotes"}, inplace=True)
             register_df['CaseNumber'] = np.nan
             register_df['CaseNumber'].fillna(casenumber, inplace=True)
-        
+
+            save_to_db(which_table='register', df=register_df, password = password)
         else:
             pass
 
@@ -121,7 +122,7 @@ def case_scrape(driver, party, links, register, password):
             links = links[(i+1):]
 
             # 5. continue loop. 
-            
+            # 
             party = pd.concat([party, combined_data], ignore_index=True)
             register = pd.concat([register, register_df], ignore_index=True)
         
