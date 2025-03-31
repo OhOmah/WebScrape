@@ -106,9 +106,9 @@ def case_scrape(driver, party, links, register, password):
             # rename and drop unneeded columns. 
             register_df.drop(register_df.index[:2], inplace=True)
             register_df.drop(['Unnamed: 0'], axis=1, inplace=True)
-            register_df.rename(columns={"Unnamed: 2": "RegisterNotes"}, inplace=True)
-            register_df['CaseNumber'] = np.nan
-            register_df['CaseNumber'].fillna(casenumber, inplace=True)
+            register_df.rename(columns={"Unnamed: 2": "registernotes"}, inplace=True)
+            register_df['casenumber'] = np.nan
+            register_df['casenumber'].fillna(casenumber, inplace=True)
 
             save_to_db(which_table='register', df=register_df, password = password)
         else:

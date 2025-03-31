@@ -41,9 +41,9 @@ def scrape():
 
     # Create final dataframe to store all the data. 
     all_party = pd.DataFrame(columns=['Name', 'PartyType', 'Representation', "CaseNumber", 'CaseName', 'CaseType', 'DateFiled', 'AdditionalInfo'])
-    all_register = pd.DataFrame(columns=['Date', 'RegisterNotes', 'CaseNumber'])
+    all_register = pd.DataFrame(columns=['date', 'registernotes', 'casenumber'])
     cases = pd.DataFrame(columns=['Name', 'PartyType', 'Representation', "CaseNumber", 'CaseName', 'CaseType', 'DateFiled', 'AdditionalInfo'])
-    register = pd.DataFrame(columns=['Date', 'RegisterNotes', 'CaseNumber'])
+    register = pd.DataFrame(columns=['date', 'registerNotes', 'casenumber'])
     all_page_data = pd.DataFrame(columns=["Date", "Time", "CaseNumber", "CaseName", "HearingDescription", "Department", "ResultType"])
 
     # Initialize driver 
