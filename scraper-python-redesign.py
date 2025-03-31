@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-from case_scrape import case_split, case_scrape, go_to_next_page, convert_date_range, grab_overall_table
+from case_scrape import case_split, case_scrape, go_to_next_page, convert_date_range
 from data_storage import startup_db
 
 import re
@@ -42,7 +42,6 @@ def scrape():
     # Create final dataframe to store all the data. 
     cases = pd.DataFrame(columns=['Name', 'PartyType', 'Representation', "CaseNumber", 'CaseName', 'CaseType', 'DateFiled', 'AdditionalInfo'])
     register = pd.DataFrame(columns=['date', 'registerNotes', 'casenumber'])
-    all_page_data = pd.DataFrame(columns=["Date", "Time", "CaseNumber", "CaseName", "HearingDescription", "Department", "ResultType"])
 
     # Initialize driver 
     driver = webdriver.Chrome()
