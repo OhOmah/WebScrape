@@ -55,7 +55,7 @@ def case_scrape(driver, party, links, register, password):
             case_info_df = case_split(columns[0].text)
 
             # Check if case number already exists
-            check = check_dupe(casenumber = case_info_df['casenumber'], password= password)
+            check = check_dupe(casenumber = case_info_df['CaseNumber'][0], password= password)
             if check == False:
                 # Pull data
                 parties = driver.find_element(By.XPATH, '//*[contains(text(), "PARTIES")]')
@@ -65,6 +65,7 @@ def case_scrape(driver, party, links, register, password):
                 print("case number already in database, skipping")
                 pass
         except:
+            print('failed try except loop')
             check = check_dupe(casenumber = case_info_df['casenumber'], password= password)
             pass
         
