@@ -112,7 +112,11 @@ def case_scrape(driver, party, links, register, password):
             register_df['casenumber'] = np.nan
             register_df['casenumber'].fillna(casenumber, inplace=True)
 
+            # make all columns lowercase
+            combined_data.columns = map(str.lower, combined_data.columns)
+
             save_to_db(which_table='register', df=register_df, password = password)
+            save_to_db(which_table='party', df=combined_data, password = password)
         else:
             pass
 
@@ -123,15 +127,9 @@ def case_scrape(driver, party, links, register, password):
             time.sleep(5)
             links = links[(i+1):]
 
-            # 5. continue loop. 
-            # 
-            party = pd.concat([party, combined_data], ignore_index=True)
-            register = pd.concat([register, register_df], ignore_index=True)
-        
         except:
             pass 
 
-    return party, register
 '''
 Logging changes made since last edit: 
     1. Added registry data
