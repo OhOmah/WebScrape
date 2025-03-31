@@ -163,29 +163,5 @@ def convert_date_range(start_date, end_date):
 
     return formatted_dates, month_range 
 
-def grab_overall_table(driver, password):
-    '''
-    PURPOSE OF THIS FUNCTION: 
-    Grabs the table for each page, saves into a dataframe then exports data to loop where
-    once we get through the date, saves into a larger dataframe. 
-    '''
-    # find the main table
-    table = driver.find_elements(By.XPATH, "//*[contains(@id, 'form.searchPage')]")
-
-    # Split 
-    raw_data = table[0].get_attribute("outerHTML")
-    
-    # Create Dataframe
-    df_list = pd.read_html(raw_data) 
-    df = df_list[0]
-
-    # Convert names of columns to better match our main dataframe  
-    df.rename(columns={'Case Number': "CaseNumber", 
-                        'Case Name': 'CaseName',
-                        'Hearing Description': 'HearingDescription',
-                        'Result Type': 'ResultType' }, inplace=True)
-    
-    df.columns = map(str.lower(), df.columns)
-    save_to_db(which_table='overall', df=df, password = password)
 
     

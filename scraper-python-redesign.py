@@ -89,11 +89,6 @@ def scrape():
             while True:
                 links = driver.find_elements(By.XPATH, "//*[contains(@href, '?q=node/391/')]") 
                 case_scrape(driver,cases,links, register, password=passwords['db_login'])
-                try:
-                    # Grab all page data
-                    grab_overall_table(driver, password=passwords['db_login'])
-                except:
-                    print("no cases this date")
 
                 if not go_to_next_page(driver):
                     break
