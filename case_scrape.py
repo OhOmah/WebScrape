@@ -65,8 +65,6 @@ def case_scrape(driver, party, links, register, password):
                 print("case number already in database, skipping")
                 pass
         except:
-            print('failed try except loop')
-            check = check_dupe(casenumber = case_info_df['casenumber'], password= password)
             pass
         
         if check == False:
