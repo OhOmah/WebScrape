@@ -53,8 +53,9 @@ def case_scrape(driver, party, links, register, password):
             table = driver.find_elements(By.XPATH, "//*[contains(@id, 'forms_table')]")
             columns = table[0].find_elements(By.TAG_NAME, 'td')
             case_info_df = case_split(columns[0].text)
+
             # Check if case number already exists
-            check = check_dupe(casenumber = case_info_df['CaseNumber'], password= password)
+            check = check_dupe(casenumber = case_info_df['casenumber'], password= password)
             if check == False:
                 # Pull data
                 parties = driver.find_element(By.XPATH, '//*[contains(text(), "PARTIES")]')
@@ -64,6 +65,7 @@ def case_scrape(driver, party, links, register, password):
                 print("case number already in database, skipping")
                 pass
         except:
+            check = check_dupe(casenumber = case_info_df['casenumber'], password= password)
             pass
         
         if check == False:
