@@ -29,7 +29,7 @@ we save to 3 databases instead.
 
 def scrape():
     # Define the date range to scrape
-    start_date = '06/05/2024'
+    start_date = '06/07/2024'
     end_date = '12/31/2024'
 
     # Pull password
